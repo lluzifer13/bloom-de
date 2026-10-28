@@ -1064,7 +1064,7 @@ const Dock = memo(function Dock() {
 			.map((id) => activeApps.find((a) => appIdentity(a.path, a.executable, a.name) === id))
 			.filter(
 				(a): a is AppInfo =>
-					!!a && !matchedRunningKeys.has(appIdentity(a.path, a.executable, a.name))
+					!!a && !a.is_background && !matchedRunningKeys.has(appIdentity(a.path, a.executable, a.name))
 			);
 
 		return [...pinned, ...unpinned];
@@ -1864,7 +1864,7 @@ const Dock = memo(function Dock() {
 					) : contextMenu.app ? (
 						<>
 							<div className="menu-item" onClick={() => togglePin(contextMenu.app!)}>
-								{contextMenu.app.is_pinned ? "Unpin from Dock" : "Pin to Dock"}
+								{contextMenu.app.is_pinned ? "Vom Dock lösen" : "An Dock anheften"}
 							</div>
 							{contextMenu.app.is_pinned && contextMenu.app.path !== "start" && (
 								<>
@@ -1912,14 +1912,14 @@ const Dock = memo(function Dock() {
 									closeMenu();
 								}}
 							>
-								Add App to Dock...
+								App zum Dock hinzufügen...
 							</div>
 							<div
 								className="menu-item has-submenu"
 								onMouseEnter={() => setActiveSubmenu("bloom")}
 								onMouseLeave={() => setActiveSubmenu(null)}
 							>
-								Bloom Options
+								Bloom-Optionen
 								<span className="submenu-arrow">▶</span>
 								<div className="submenu">
 									<div
@@ -1929,10 +1929,10 @@ const Dock = memo(function Dock() {
 											closeMenu();
 										}}
 									>
-										Open Settings
+										Einstellungen öffnen
 									</div>
 									<div className="menu-item" onClick={() => invoke("restart_bloom")}>
-										Restart Bloom
+										Bloom neu starten
 									</div>
 									<div
 										className="menu-item"
@@ -1941,11 +1941,11 @@ const Dock = memo(function Dock() {
 											closeMenu();
 										}}
 									>
-										Clear Icon Cache
+										Icon-Cache leeren
 									</div>
 									<div className="menu-divider" />
 									<div className="menu-item quit" onClick={() => invoke("quit_bloom")}>
-										Quit Bloom
+										Bloom beenden
 									</div>
 								</div>
 							</div>
@@ -1960,7 +1960,7 @@ const Dock = memo(function Dock() {
 										<div className="menu-divider" />
 										{app.tray_ids?.map((id, index, ids) => (
 											<div key={id} className="menu-item" onClick={() => void openTrayMenu(id)}>
-												{ids.length > 1 ? `Tray menu ${index + 1}` : "App tray menu"}
+												{ids.length > 1 ? `Tray menu ${index + 1}` : "Infobereich-Menü (Tray)"}
 											</div>
 										))}
 										{canOpenNew && (
@@ -1971,7 +1971,7 @@ const Dock = memo(function Dock() {
 													closeMenu();
 												}}
 											>
-												Open New Instance
+												Neues Fenster öffnen
 											</div>
 										)}
 									</>
@@ -2011,14 +2011,14 @@ const Dock = memo(function Dock() {
 									closeMenu();
 								}}
 							>
-								Add App to Dock...
+								App zum Dock hinzufügen...
 							</div>
 							<div
 								className="menu-item has-submenu"
 								onMouseEnter={() => setActiveSubmenu("bloom")}
 								onMouseLeave={() => setActiveSubmenu(null)}
 							>
-								Bloom Options
+								Bloom-Optionen
 								<span className="submenu-arrow">▶</span>
 								<div className="submenu">
 									<div
@@ -2028,10 +2028,10 @@ const Dock = memo(function Dock() {
 											closeMenu();
 										}}
 									>
-										Open Settings
+										Einstellungen öffnen
 									</div>
 									<div className="menu-item" onClick={() => invoke("restart_bloom")}>
-										Restart Bloom
+										Bloom neu starten
 									</div>
 									<div
 										className="menu-item"
@@ -2040,11 +2040,11 @@ const Dock = memo(function Dock() {
 											closeMenu();
 										}}
 									>
-										Clear Icon Cache
+										Icon-Cache leeren
 									</div>
 									<div className="menu-divider" />
 									<div className="menu-item quit" onClick={() => invoke("quit_bloom")}>
-										Quit Bloom
+										Bloom beenden
 									</div>
 								</div>
 							</div>

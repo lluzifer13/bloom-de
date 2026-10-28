@@ -29,16 +29,16 @@ const EMPTY_BODY_HEIGHT = 72;
 
 function duration(seconds: number): string {
 	const minutes = Math.round(seconds / 60);
-	if (minutes < 60) return `${minutes} min`;
+	if (minutes < 60) return `${minutes} Min.`;
 	const hours = Math.floor(minutes / 60);
 	const rest = minutes % 60;
-	return rest ? `${hours} h ${rest} min` : `${hours} h`;
+	return rest ? `${hours} Std. ${rest} Min.` : `${hours} Std.`;
 }
 
 function pcStatus(pc: PcBattery): string {
-	if (pc.charging) return pc.seconds_to_full ? `Charging · ${duration(pc.seconds_to_full)} to full` : "Charging";
-	if (pc.plugged_in) return "Plugged in";
-	return pc.seconds_left ? `${duration(pc.seconds_left)} left` : "On battery";
+	if (pc.charging) return pc.seconds_to_full ? `Wird geladen · noch ${duration(pc.seconds_to_full)} bis voll` : "Wird geladen";
+	if (pc.plugged_in) return "Am Stromnetz";
+	return pc.seconds_left ? `noch ${duration(pc.seconds_left)}` : "Akkubetrieb";
 }
 
 /** One level: its percent over a thin bar, green, or red when low. */
@@ -97,7 +97,7 @@ export function ConnectedDevicesPanel({ data, height, buds, lowThreshold, onCont
 		if (pc?.present && pc.percent !== null) {
 			entries.push({
 				id: "pc",
-				name: "This PC",
+				name: "Dieser PC",
 				kind: "pc",
 				wired: false,
 				art: null,
@@ -154,7 +154,7 @@ export function ConnectedDevicesPanel({ data, height, buds, lowThreshold, onCont
 				</div>
 			);
 		}
-		if (entry.level === null) return entry.wired ? null : <span className="bh-unknown">No battery info</span>;
+		if (entry.level === null) return entry.wired ? null : <span className="bh-unknown">Keine Akku-Info</span>;
 		const part = { level: entry.level, charging: entry.charging };
 		return (
 			<div className="bh-meters">
@@ -165,9 +165,9 @@ export function ConnectedDevicesPanel({ data, height, buds, lowThreshold, onCont
 
 	const subText = (entry: DeviceEntry) => {
 		if (entry.kind === "pc" && pc) return pcStatus(pc);
-		if (entry.wired) return entry.id === "jack" ? "Headphone jack" : "USB";
-		if (entry.buds) return "Each bud and the case";
-		return "Connected";
+		if (entry.wired) return entry.id === "jack" ? "Klinkenanschluss" : "USB";
+		if (entry.buds) return "Beide Buds & Ladecase";
+		return "Verbunden";
 	};
 
 	// The drawing an audio device's popup uses. Picking what Bloom would
@@ -240,7 +240,7 @@ export function ConnectedDevicesPanel({ data, height, buds, lowThreshold, onCont
 				<span className="qp-row-icon bh-title-icon">
 					<MonitorSmartphone />
 				</span>
-				<span className="qp-title">Connected devices</span>
+				<span className="qp-title">Verbundene Geräte</span>
 			</div>
 			<div className="qp-body">
 				{loading ? (
@@ -249,7 +249,7 @@ export function ConnectedDevicesPanel({ data, height, buds, lowThreshold, onCont
 					</div>
 				) : empty ? (
 					<div className="qp-empty">
-						<span>No devices connected</span>
+						<span>Keine Geräte verbunden</span>
 					</div>
 				) : (
 					<div ref={listRef} className="qp-list bh-list">

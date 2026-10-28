@@ -3880,13 +3880,13 @@ function App() {
 														toggleWifi();
 													}}
 													onContextMenu={handleWifiRightClick}
-													title="Left-click to toggle, Right-click for networks"
+													title="Linksklick zum Umschalten, Rechtsklick für Netzwerke"
 												>
 													<div className="cc-pill-icon-wrapper">
 														<WifiIcon enabled={wifiEnabled} connected={wifiConnected} />
 													</div>
 													<div className="cc-pill-info">
-														<span className="cc-pill-title">Wi-Fi</span>
+														<span className="cc-pill-title">WLAN</span>
 														<span className="cc-pill-status">
 															{wifiStatus === null
 																? "…"
@@ -3894,7 +3894,7 @@ function App() {
 																	? "Off"
 																	: wifiConnected
 																		? (wifiStatus?.ssid ?? "Connected")
-																		: "Not connected"}
+																		: "Nicht verbunden"}
 														</span>
 													</div>
 													<button
@@ -3914,18 +3914,18 @@ function App() {
 												<div
 													className={`cc-pill-tile ${dockMode === "fixed" ? "active" : ""}`}
 													onClick={toggleDockModeSetting}
-													title="Cycle dock mode: Fixed / Smart / Peek"
+													title="Dock-Modus wechseln: Fest / Intelligent / Peek"
 												>
 													<div className="cc-pill-icon-wrapper">
 														<DockIcon />
 													</div>
 													<div className="cc-pill-info">
-														<span className="cc-pill-title">Dock Mode</span>
+														<span className="cc-pill-title">Dock-Modus</span>
 														<span className="cc-pill-status">
 															{dockMode === "fixed"
-																? "Fixed"
+																? "Fest"
 																: dockMode === "smart"
-																	? "Smart"
+																	? "Intelligent"
 																	: "Peek"}
 														</span>
 													</div>
@@ -3939,7 +3939,7 @@ function App() {
 														toggleBluetooth();
 													}}
 													onContextMenu={handleBluetoothRightClick}
-													title="Left-click to toggle, Right-click for devices"
+													title="Linksklick zum Umschalten, Rechtsklick für Geräte"
 												>
 													<div className="cc-pill-icon-wrapper">
 														<BluetoothIcon />
@@ -3952,8 +3952,8 @@ function App() {
 																: btConnectedNames.length === 1
 																	? btConnectedNames[0]
 																	: btConnectedNames.length > 1
-																		? `${btConnectedNames.length} connected`
-																		: "On"}
+																		? `${btConnectedNames.length} verbunden`
+																		: "Ein"}
 														</span>
 													</div>
 													<button
@@ -3973,18 +3973,18 @@ function App() {
 												<div
 													className={`cc-pill-tile ${notchMode === "fixed" ? "active" : ""}`}
 													onClick={toggleNotchModeSetting}
-													title="Cycle notch mode: Fixed / Smart / Peek"
+													title="Notch-Modus wechseln: Fest / Intelligent / Peek"
 												>
 													<div className="cc-pill-icon-wrapper">
 														<NotchIcon />
 													</div>
 													<div className="cc-pill-info">
-														<span className="cc-pill-title">Notch Mode</span>
+														<span className="cc-pill-title">Notch-Modus</span>
 														<span className="cc-pill-status">
 															{notchMode === "fixed"
-																? "Fixed"
+																? "Fest"
 																: notchMode === "smart"
-																	? "Smart"
+																	? "Intelligent"
 																	: "Peek"}
 														</span>
 													</div>
@@ -4001,7 +4001,7 @@ function App() {
 															console.error
 														);
 													}}
-													title="Do Not Disturb — Open Windows notification settings"
+													title="Nicht stören — Windows-Benachrichtigungseinstellungen"
 												>
 													<MoonIcon />
 												</button>
@@ -4011,7 +4011,7 @@ function App() {
 														e.stopPropagation();
 														openBatterySaverSettings();
 													}}
-													title={`Energy Saver: ${batterySaverEnabled ? "On" : "Off"} — Click to open Settings`}
+													title={`Stromsparmodus: ${batterySaverEnabled ? "Ein" : "Aus"} — Klicken für Einstellungen`}
 												>
 													<BatterySaverIcon />
 												</button>
@@ -4021,7 +4021,7 @@ function App() {
 														e.stopPropagation();
 														openSystemTray(e);
 													}}
-													title="System Tray"
+													title="Infobereich (System-Tray)"
 												>
 													<TrayIcon />
 												</button>
@@ -4031,7 +4031,7 @@ function App() {
 														e.stopPropagation();
 														invoke("open_notification_center");
 													}}
-													title="Notification Center"
+													title="Benachrichtigungen"
 												>
 													<BellIcon />
 												</button>
@@ -4041,7 +4041,7 @@ function App() {
 														e.stopPropagation();
 														openSettingsWindow();
 													}}
-													title="Bloom Settings"
+													title="Bloom-Einstellungen"
 												>
 													<SettingsIcon />
 												</button>
@@ -4051,7 +4051,7 @@ function App() {
 														e.stopPropagation();
 														invoke("restart_bloom");
 													}}
-													title="Restart Bloom"
+													title="Bloom neu starten"
 												>
 													<ReloadIcon />
 												</button>
@@ -4063,7 +4063,7 @@ function App() {
 												<div className="cc-classic-slider-row">
 													<div className="cc-classic-slider-label">
 														<VolumeLowIcon style={{ opacity: 0.5 }} />
-														<span>Volume</span>
+														<span>Lautstärke</span>
 													</div>
 													<div className="cc-classic-slider-track">
 														<input
@@ -4091,7 +4091,7 @@ function App() {
 												<div className="cc-classic-slider-row">
 													<div className="cc-classic-slider-label">
 														<BrightnessLowIcon />
-														<span>Brightness</span>
+														<span>Helligkeit</span>
 													</div>
 													<div className="cc-classic-slider-track">
 														<input

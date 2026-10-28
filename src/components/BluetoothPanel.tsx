@@ -199,9 +199,9 @@ export function BluetoothPanel({ enabled, onToggle, onBack, onPinChange }: Bluet
 	};
 
 	const statusText = (d: BtDevice) => {
-		if (busy === d.id) return d.connected ? "Disconnecting…" : "Connecting…";
-		if (!d.connected) return "Not connected";
-		return d.battery !== null ? `Connected · ${d.battery}%` : "Connected";
+		if (busy === d.id) return d.connected ? "Wird getrennt…" : "Wird verbunden…";
+		if (!d.connected) return "Nicht verbunden";
+		return d.battery !== null ? `Verbunden · ${d.battery}%` : "Verbunden";
 	};
 
 	const renderPrompt = () => {
@@ -337,7 +337,7 @@ export function BluetoothPanel({ enabled, onToggle, onBack, onPinChange }: Bluet
 		if (devices.length === 0) {
 			return (
 				<div className="qp-empty">
-					<span>No paired devices</span>
+					<span>Keine gekoppelten Geräte</span>
 					<button className="qp-btn" onClick={() => setAdding(true)}>
 						Add device
 					</button>
@@ -385,14 +385,14 @@ export function BluetoothPanel({ enabled, onToggle, onBack, onPinChange }: Bluet
 												{isBusy ? (
 													<LoaderCircle className="qp-spin" />
 												) : d.connected ? (
-													"Disconnect"
+													"Trennen"
 												) : (
-													"Connect"
+													"Verbinden"
 												)}
 											</button>
 										)}
 										<button className="qp-btn" disabled={isBusy} onClick={() => void remove(d)}>
-											Remove
+											Entfernen
 										</button>
 									</div>
 								</div>
@@ -411,11 +411,11 @@ export function BluetoothPanel({ enabled, onToggle, onBack, onPinChange }: Bluet
 				<button
 					className="qp-icon-btn"
 					onClick={adding ? () => setAdding(false) : onBack}
-					aria-label={adding ? "Back to devices" : "Back to controls"}
+					aria-label={adding ? "Zurück zu Geräten" : "Zurück zur Steuerung"}
 				>
 					<ChevronLeft />
 				</button>
-				<span className="qp-title">{adding ? "Add a device" : "Bluetooth"}</span>
+				<span className="qp-title">{adding ? "Gerät hinzufügen" : "Bluetooth"}</span>
 				{!adding && (
 					<button
 						className="qp-icon-btn"
@@ -447,7 +447,7 @@ export function BluetoothPanel({ enabled, onToggle, onBack, onPinChange }: Bluet
 				)}
 			</div>
 			<button className="qp-footer" onClick={() => invoke("open_bluetooth_settings")}>
-				More Bluetooth settings
+				Weitere Bluetooth-Einstellungen
 			</button>
 		</div>
 	);

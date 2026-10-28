@@ -40,13 +40,13 @@ export interface DeviceGroup {
 }
 
 const GROUPS: { key: DeviceGroupKey; title: string }[] = [
-	{ key: "low", title: "Needs charging" },
-	{ key: "pc", title: "This PC" },
+	{ key: "low", title: "Laden erforderlich" },
+	{ key: "pc", title: "Dieser PC" },
 	{ key: "audio", title: "Audio" },
-	{ key: "phone", title: "Phone & watch" },
-	{ key: "accessories", title: "Accessories" },
-	{ key: "usb", title: "Drives & cameras" },
-	{ key: "other", title: "Other" }
+	{ key: "phone", title: "Smartphone & Smartwatch" },
+	{ key: "accessories", title: "Zubehör" },
+	{ key: "usb", title: "Laufwerke & Kameras" },
+	{ key: "other", title: "Sonstige" }
 ];
 
 function typeGroup(kind: string): DeviceGroupKey {

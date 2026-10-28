@@ -173,7 +173,7 @@ export function WifiPanel({ enabled, onToggle, onBack, onPinChange }: WifiPanelP
 
 	const statusText = (n: WifiNetwork) => {
 		if (busy === n.ssid) return "Connecting…";
-		if (n.connected) return "Connected";
+		if (n.connected) return "Verbunden";
 		if (n.saved) return "Saved";
 		return n.security === "open" ? "Open" : "Secured";
 	};
@@ -239,7 +239,7 @@ export function WifiPanel({ enabled, onToggle, onBack, onPinChange }: WifiPanelP
 	};
 
 	const renderBody = () => {
-		if (!enabled) return <div className="qp-empty">Wi-Fi is off</div>;
+		if (!enabled) return <div className="qp-empty">WLAN ist deaktiviert</div>;
 		if (list?.location_denied) {
 			return (
 				<div className="qp-empty">
@@ -304,7 +304,7 @@ export function WifiPanel({ enabled, onToggle, onBack, onPinChange }: WifiPanelP
 				<button className="qp-icon-btn" onClick={onBack} aria-label="Back to controls">
 					<ChevronLeft />
 				</button>
-				<span className="qp-title">Wi-Fi</span>
+				<span className="qp-title">WLAN</span>
 				<button
 					className="qp-icon-btn"
 					onClick={() => void scan()}
@@ -325,7 +325,7 @@ export function WifiPanel({ enabled, onToggle, onBack, onPinChange }: WifiPanelP
 			</div>
 			<div className="qp-body">{renderBody()}</div>
 			<button className="qp-footer" onClick={() => invoke("wifi_open_settings", { page: "wifi" })}>
-				More Wi-Fi settings
+				Weitere WLAN-Einstellungen
 			</button>
 		</div>
 	);
