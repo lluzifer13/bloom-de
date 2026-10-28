@@ -15,9 +15,9 @@ export interface CustomFolder {
 export const KNOWN_FOLDER_OPTIONS = [
 	{ id: "desktop", label: "Desktop" },
 	{ id: "downloads", label: "Downloads" },
-	{ id: "documents", label: "Documents" },
-	{ id: "pictures", label: "Pictures" },
-	{ id: "music", label: "Music" },
+	{ id: "documents", label: "Dokumente" },
+	{ id: "pictures", label: "Bilder" },
+	{ id: "music", label: "Musik" },
 	{ id: "videos", label: "Videos" }
 ];
 

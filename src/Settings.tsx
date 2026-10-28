@@ -23,21 +23,21 @@ import "./Settings.css";
 const appWindow = getCurrentWebviewWindow();
 
 const TABS: { id: SettingsTab; label: string; icon: typeof Settings }[] = [
-	{ id: "general", label: "General", icon: Settings },
-	{ id: "appearance", label: "Appearance", icon: Palette },
+	{ id: "general", label: "Allgemein", icon: Settings },
+	{ id: "appearance", label: "Design", icon: Palette },
 	{ id: "notch", label: "Notch", icon: PanelTop },
 	{ id: "dock", label: "Dock", icon: Monitor },
 	{ id: "overlays", label: "Overlays", icon: Layers },
-	{ id: "about", label: "About", icon: Info }
+	{ id: "about", label: "Über", icon: Info }
 ];
 
 const TAB_COPY: Record<SettingsTab, string> = {
-	general: "The essentials for how Bloom starts and runs.",
-	appearance: "Make every surface feel at home on your desktop.",
-	notch: "Choose what appears at the top of your screen.",
-	dock: "Shape the taskbar replacement around your workflow.",
-	overlays: "Keep quick controls visible only when you need them.",
-	about: "Version, updates and your settings data."
+	general: "Grundlegende Einstellungen zum Starten und Ausführen von Bloom.",
+	appearance: "Passe Oberflächen und Design an deinen Desktop an.",
+	notch: "Wähle, was oben am Bildschirmrand angezeigt wird.",
+	dock: "Passe das Dock an deinen Arbeitsablauf an.",
+	overlays: "Steuerelemente nur anzeigen, wenn du sie brauchst.",
+	about: "Version, Updates und Einstellungen."
 };
 
 function SettingsApp() {
@@ -90,9 +90,9 @@ function SettingsApp() {
 		<div className="settings-container" style={{ zoom: settings.scale }}>
 			<div className="title-bar" data-tauri-drag-region>
 				<span className="title-text" data-tauri-drag-region>
-					Settings
+					Einstellungen
 				</span>
-				<button className="close-btn" onClick={handleClose} title="Close Settings">
+				<button className="close-btn" onClick={handleClose} title="Einstellungen schließen">
 					<X size={12} strokeWidth={1.5} className="close-btn-icon" />
 				</button>
 			</div>

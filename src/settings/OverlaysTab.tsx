@@ -26,7 +26,7 @@ export function OverlaysTab({
 		<>
 			<div className="setting-group-label">Overlays</div>
 			<div className="setting-group">
-				<SettingRow icon={Volume2} label="Volume HUD" desc="Bloom volume overlay">
+				<SettingRow icon={Volume2} label="Lautstärke-Overlay" desc="Bloom Lautstärkeanzeige">
 					<label className="toggle-switch">
 						<input type="checkbox" checked={volumeOverlayEnabled} onChange={toggleVolumeOverlay} />
 						<span className="slider"></span>
@@ -36,8 +36,8 @@ export function OverlaysTab({
 				{volumeOverlayEnabled && (
 					<SettingRow
 						icon={ArrowLeftToLine}
-						label="Show on Edge Hover"
-						desc="Slide in from left edge"
+						label="Am Bildschirmrand einblenden"
+						desc="Vom linken Rand hereinwischen"
 					>
 						<label className="toggle-switch">
 							<input type="checkbox" checked={volumeEdgeEnabled} onChange={toggleVolumeEdge} />
@@ -46,7 +46,7 @@ export function OverlaysTab({
 					</SettingRow>
 				)}
 
-				<SettingRow icon={Sun} label="Brightness HUD" desc="Bloom brightness overlay">
+				<SettingRow icon={Sun} label="Helligkeits-Overlay" desc="Bloom Helligkeitsanzeige">
 					<label className="toggle-switch">
 						<input
 							type="checkbox"
@@ -60,8 +60,8 @@ export function OverlaysTab({
 				{brightnessOverlayEnabled && (
 					<SettingRow
 						icon={ArrowRightToLine}
-						label="Show on Edge Hover"
-						desc="Slide in from right edge"
+						label="Am Bildschirmrand einblenden"
+						desc="Vom rechten Rand hereinwischen"
 						divider={false}
 					>
 						<label className="toggle-switch">

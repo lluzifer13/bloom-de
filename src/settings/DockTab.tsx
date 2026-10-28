@@ -187,7 +187,7 @@ export function DockTab({
 		<>
 			<div className="setting-group-label">Dock</div>
 			<div className="setting-group">
-				<SettingRow icon={Monitor} label="Bloom Dock" desc="Replace Windows taskbar">
+				<SettingRow icon={Monitor} label="Bloom Dock" desc="Ersetzt die Windows-Taskleiste">
 					<label className="toggle-switch">
 						<input type="checkbox" checked={dockEnabled} onChange={toggleDock} />
 						<span className="slider"></span>
@@ -198,28 +198,28 @@ export function DockTab({
 					<>
 						<SettingRow
 							icon={dockMode === "fixed" ? EyeOff : Eye}
-							label="Behavior"
-							desc="Choose how the dock appears"
+							label="Verhalten"
+							desc="Wähle, wie das Dock erscheint"
 						>
 							<select
 								className="settings-select"
 								value={dockMode}
 								onChange={(e) => setDockModeValue(e.target.value)}
 							>
-								<option value="fixed">Fixed</option>
-								<option value="smart">Smart</option>
-								<option value="peek">Peek</option>
+								<option value="fixed">Fest (Immer sichtbar)</option>
+								<option value="smart">Intelligent</option>
+								<option value="peek">Bei Randberührung (Peek)</option>
 							</select>
 						</SettingRow>
 
 						{dockMode !== "fixed" && (
 							<SettingRow
 								icon={Timer}
-								label="Peek Delay"
+								label="Reaktionszeit"
 								desc={
 									dockEdgeDelay === 0
-										? "Reveal instantly on bottom-edge contact"
-										: `Rest on the bottom edge for ${dockEdgeDelay}ms to reveal`
+										? "Sofort beim Berühren des unteren Randes einblenden"
+										: `Am unteren Rand verweilen (${dockEdgeDelay} ms)`
 								}
 							>
 								<input
@@ -234,14 +234,14 @@ export function DockTab({
 							</SettingRow>
 						)}
 
-						<SettingRow icon={Eye} label="Show App Previews" desc="Show window thumbnails on hover">
+						<SettingRow icon={Eye} label="Fenstervorschau" desc="Miniaturansichten beim Drüberfahren anzeigen">
 							<label className="toggle-switch">
 								<input type="checkbox" checked={dockPreviewEnabled} onChange={toggleDockPreview} />
 								<span className="slider"></span>
 							</label>
 						</SettingRow>
 
-						<SettingRow icon={Circle} label="Icon Only" desc="Remove icon background and padding">
+						<SettingRow icon={Circle} label="Nur Symbole" desc="Hintergrund und Rand der Symbole ausblenden">
 							<label className="toggle-switch">
 								<input type="checkbox" checked={dockIconOnly} onChange={toggleDockIconOnly} />
 								<span className="slider"></span>
@@ -250,8 +250,8 @@ export function DockTab({
 
 						<SettingRow
 							icon={Columns2}
-							label="App Separator"
-							desc="Show a divider before unpinned apps"
+							label="Trennlinie"
+							desc="Trennlinie vor nicht angehefteten Apps anzeigen"
 						>
 							<label className="toggle-switch">
 								<input
@@ -263,7 +263,7 @@ export function DockTab({
 							</label>
 						</SettingRow>
 
-						<SettingRow icon={Copy} label="Task View" desc="Show the Task View button beside Start">
+						<SettingRow icon={Copy} label="Aktive Anwendungen (Task View)" desc="Task-View-Schaltfläche neben dem Start-Button anzeigen">
 							<label className="toggle-switch">
 								<input type="checkbox" checked={dockTaskView} onChange={toggleDockTaskView} />
 								<span className="slider"></span>
@@ -272,8 +272,8 @@ export function DockTab({
 
 						<SettingRow
 							icon={Keyboard}
-							label="Win+Number Shortcuts"
-							desc="Open pinned apps with Win+1 through Win+9"
+							label="Tastenkombination Win+Zahl"
+							desc="Angeheftete Apps mit Win+1 bis Win+9 öffnen"
 							divider={dockMode === "fixed"}
 						>
 							<label className="toggle-switch">
@@ -289,8 +289,8 @@ export function DockTab({
 						{dockMode === "fixed" && (
 							<SettingRow
 								icon={Maximize2}
-								label="Adaptive Mode"
-								desc="Stretch to full width when a window is maximized"
+								label="Adaptiver Modus"
+								desc="Auf volle Breite erweitern bei maximiertem Fenster"
 								divider={false}
 							>
 								<label className="toggle-switch">
@@ -302,27 +302,27 @@ export function DockTab({
 
 						<SettingRow
 							icon={LayoutPanelLeft}
-							label="Dock Extras"
-							desc="Show drives, folders and the Recycle Bin beside the apps"
+							label="Dock-Zusätze"
+							desc="Laufwerke, Ordner und Papierkorb im Dock anzeigen"
 						>
 							<select
 								className="settings-select"
 								value={dockExtrasPosition}
 								onChange={(e) => handleDockExtrasPositionChange(e.target.value)}
 							>
-								<option value="off">Off</option>
-								<option value="left">Left</option>
-								<option value="right">Right</option>
+								<option value="off">Aus</option>
+								<option value="left">Links</option>
+								<option value="right">Rechts</option>
 							</select>
 						</SettingRow>
 
 						{dockExtrasPosition !== "off" && (
 							<details className="settings-disclosure">
-								<summary>Manage dock extras <span>Drives, folders and Recycle Bin</span></summary>
+								<summary>Dock-Zusätze verwalten <span>Laufwerke, Ordner und Papierkorb</span></summary>
 								<SettingRow
 									icon={HardDrive}
-									label="Drives"
-									desc="Fixed, removable and connected network drives"
+									label="Laufwerke"
+									desc="Lokale, externe und Netzlaufwerke anzeigen"
 									divider={!dockExtrasDrives}
 								>
 									<label className="toggle-switch">
@@ -349,8 +349,8 @@ export function DockTab({
 
 								<SettingRow
 									icon={Trash2}
-									label="Recycle Bin"
-									desc="Show the Recycle Bin in the extras"
+									label="Papierkorb"
+									desc="Papierkorb im Dock anzeigen"
 								>
 									<label className="toggle-switch">
 										<input
@@ -371,9 +371,9 @@ export function DockTab({
 											<FolderOpen size={14} strokeWidth={1.5} />
 										</div>
 										<div className="setting-info">
-											<span className="setting-label">Special Folders</span>
+											<span className="setting-label">Standard-Ordner</span>
 											<span className="setting-desc">
-												Pick the folders that appear in the extras
+												Wähle Ordner für den Schnellzugriff
 											</span>
 										</div>
 									</div>
@@ -411,8 +411,8 @@ export function DockTab({
 											<FolderPlus size={14} strokeWidth={1.5} />
 										</div>
 										<div className="setting-info">
-											<span className="setting-label">Custom Folders</span>
-											<span className="setting-desc">Add any folder to the extras section</span>
+											<span className="setting-label">Eigene Ordner</span>
+											<span className="setting-desc">Beliebigen Ordner zum Dock hinzufügen</span>
 										</div>
 									</div>
 									<div
@@ -432,7 +432,7 @@ export function DockTab({
 												<button
 													type="button"
 													className="extra-folder-remove"
-													title="Remove folder"
+													title="Ordner entfernen"
 													onClick={() => handleRemoveDockExtraFolder(folder.path)}
 												>
 													<X size={14} strokeWidth={2} />
@@ -445,7 +445,7 @@ export function DockTab({
 											onClick={handleAddDockExtraFolder}
 										>
 											<Plus size={13} strokeWidth={2} />
-											Add Folder...
+											Ordner hinzufügen...
 										</button>
 									</div>
 								</div>
@@ -462,8 +462,8 @@ export function DockTab({
 									<Sparkles size={14} strokeWidth={1.5} />
 								</div>
 								<div className="setting-info">
-									<span className="setting-label">Start Menu Icon</span>
-									<span className="setting-desc">Choose the dock start button icon</span>
+									<span className="setting-label">Startmenü-Symbol</span>
+									<span className="setting-desc">Symbol für den Start-Button im Dock wählen</span>
 								</div>
 							</div>
 							<div
@@ -492,7 +492,7 @@ export function DockTab({
 								<div
 									onClick={() => document.getElementById("start-icon-file-input")?.click()}
 									style={startIconTileStyle(startIcon.startsWith("custom:"))}
-									title="Custom icon"
+									title="Eigenes Symbol"
 								>
 									{startIcon.startsWith("custom:") ? (
 										<img
@@ -514,7 +514,7 @@ export function DockTab({
 									<div
 										onClick={() => handleStartIconChange("default")}
 										style={startIconTileStyle(false)}
-										title="Reset to default"
+										title="Auf Standard zurücksetzen"
 									>
 										<RotateCcw size={18} strokeWidth={1.5} />
 									</div>

@@ -417,11 +417,11 @@ fn main() {
             {
                 use tauri::menu::{Menu, MenuItem};
                 use tauri::tray::{MouseButton, MouseButtonState, TrayIconBuilder, TrayIconEvent};
-                let quit_item = MenuItem::with_id(app, "quit", "Quit Bloom", true, None::<&str>)?;
+                let quit_item = MenuItem::with_id(app, "quit", "Bloom beenden", true, None::<&str>)?;
                 let restart_item =
-                    MenuItem::with_id(app, "restart", "Restart Bloom", true, None::<&str>)?;
+                    MenuItem::with_id(app, "restart", "Bloom neu starten", true, None::<&str>)?;
                 let settings_item =
-                    MenuItem::with_id(app, "settings", "Open Settings", true, None::<&str>)?;
+                    MenuItem::with_id(app, "settings", "Einstellungen öffnen", true, None::<&str>)?;
                 let menu = Menu::with_items(app, &[&settings_item, &restart_item, &quit_item])?;
                 let ah = app.handle().clone();
                 TrayIconBuilder::new()

@@ -39,26 +39,26 @@ export function AppearanceTab({
 
 	return (
 		<>
-			<div className="setting-group-label">Theme</div>
+			<div className="setting-group-label">Design</div>
 			<div className="setting-group">
-				<SettingRow icon={Palette} label="Theme Mode" desc="Configure visual styling">
+				<SettingRow icon={Palette} label="Design-Modus" desc="Visuellen Stil anpassen">
 					<select
 						className="settings-select"
 						value={themeMode}
 						onChange={(e) => handleThemeModeChange(e.target.value)}
 					>
-						<option value="dark">Dark (Translucent)</option>
-						<option value="light">Light (Translucent)</option>
-						<option value="custom">Custom Color</option>
-						<option value="adaptive">Adaptive Accent</option>
+						<option value="dark">Dunkel (Halbtransparent)</option>
+						<option value="light">Hell (Halbtransparent)</option>
+						<option value="custom">Eigene Farbe</option>
+						<option value="adaptive">Adaptiver Akzent</option>
 					</select>
 				</SettingRow>
 
 				{showCustomColor && (
 					<SettingRow
 						icon={Droplet}
-						label="Custom Theme Color"
-						desc="Choose layout background color"
+						label="Eigene Design-Farbe"
+						desc="Hintergrundfarbe für Overlays wählen"
 					>
 						<div className="color-picker-row">
 							<input
@@ -74,8 +74,8 @@ export function AppearanceTab({
 
 				<SettingRow
 					icon={Contrast}
-					label="Background Opacity"
-					desc={`Adjust theme transparency (${Math.round(themeOpacity * 100)}%)`}
+					label="Hintergrund-Deckkraft"
+					desc={`Transparenz anpassen (${Math.round(themeOpacity * 100)}%)`}
 					divider={showAdvancedSliders}
 				>
 					<input
@@ -93,8 +93,8 @@ export function AppearanceTab({
 					<>
 						<SettingRow
 							icon={Droplets}
-							label="Color Saturation"
-							desc={`Adjust theme color vibrancy (${Math.round(themeSaturation * 100)}%)`}
+							label="Farbsättigung"
+							desc={`Farbintensität anpassen (${Math.round(themeSaturation * 100)}%)`}
 						>
 							<input
 								type="range"
@@ -109,8 +109,8 @@ export function AppearanceTab({
 
 						<SettingRow
 							icon={Sun}
-							label="Background Brightness"
-							desc={`Adjust background lightness (${Math.round(themeBrightness * 100)}%)`}
+							label="Hintergrund-Helligkeit"
+							desc={`Helligkeit des Hintergrunds (${Math.round(themeBrightness * 100)}%)`}
 							divider={false}
 						>
 							<input
@@ -127,9 +127,9 @@ export function AppearanceTab({
 				)}
 			</div>
 
-			<div className="setting-group-label">Display</div>
+			<div className="setting-group-label">Bildschirm</div>
 			<div className="setting-group">
-				<SettingRow icon={Square} label="Screen Corners" desc="Rounded top edges">
+				<SettingRow icon={Square} label="Bildschirmecken" desc="Obere Bildschirmecken abrunden">
 					<label className="toggle-switch">
 						<input type="checkbox" checked={cornersEnabled} onChange={toggleCorners} />
 						<span className="slider"></span>
@@ -138,8 +138,8 @@ export function AppearanceTab({
 
 				<SettingRow
 					icon={Maximize2}
-					label="UI & Font Scale"
-					desc={`Adjust desktop size (${Math.round(scale * 100)}%)`}
+					label="Skalierung & Schrift"
+					desc={`Größe anpassen (${Math.round(scale * 100)}%)`}
 					divider={false}
 				>
 					<div className="scale-button-container">
@@ -147,7 +147,7 @@ export function AppearanceTab({
 							onClick={() => handleScaleChange(Math.max(0.8, parseFloat((scale - 0.1).toFixed(1))))}
 							disabled={scale <= 0.8}
 							className="scale-adjust-btn"
-							title="Decrease Scale"
+							title="Verkleinern"
 						>
 							—
 						</button>
@@ -156,7 +156,7 @@ export function AppearanceTab({
 							onClick={() => handleScaleChange(Math.min(1.3, parseFloat((scale + 0.1).toFixed(1))))}
 							disabled={scale >= 1.3}
 							className="scale-adjust-btn"
-							title="Increase Scale"
+							title="Vergrößern"
 						>
 							+
 						</button>

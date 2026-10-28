@@ -33,39 +33,39 @@ export function AboutTab({
 	const getUpdateLabel = () => {
 		switch (updateStatus) {
 			case "checking":
-				return "Checking...";
+				return "Suche nach Updates...";
 			case "available":
-				return `Update Available (v${updateVersion})`;
+				return `Update verfügbar (v${updateVersion})`;
 			case "uptodate":
-				return "Bloom is up to date";
+				return "Bloom ist auf dem neuesten Stand";
 			case "downloading":
-				return "Downloading Update...";
+				return "Update wird heruntergeladen...";
 			case "installing":
-				return "Installing...";
+				return "Wird installiert...";
 			case "error":
-				return "No updates found";
+				return "Keine Updates gefunden";
 			default:
-				return "Check for Updates";
+				return "Nach Updates suchen";
 		}
 	};
 
 	const getUpdateDesc = () =>
 		updateStatus === "available"
-			? "Click to install and restart"
-			: `Currently running v${appVersion}`;
+			? "Klicken zum Installieren und Neustarten"
+			: `Installierte Version: v${appVersion}`;
 
 	const getExportLabel = () => {
-		if (exportStatus === "exporting") return "Exporting...";
-		if (exportStatus === "success") return "Exported!";
-		if (exportStatus === "error") return "Export failed. Try again.";
-		return "Export Settings";
+		if (exportStatus === "exporting") return "Exportiere...";
+		if (exportStatus === "success") return "Erfolgreich exportiert!";
+		if (exportStatus === "error") return "Export fehlgeschlagen. Erneut versuchen.";
+		return "Einstellungen exportieren";
 	};
 
 	const getImportLabel = () => {
-		if (importStatus === "importing") return "Importing...";
-		if (importStatus === "success") return "Imported!";
-		if (importStatus === "error") return "Import failed. Check the file and try again.";
-		return "Import Settings";
+		if (importStatus === "importing") return "Importiere...";
+		if (importStatus === "success") return "Erfolgreich importiert!";
+		if (importStatus === "error") return "Import fehlgeschlagen. Bitte Datei prüfen.";
+		return "Einstellungen importieren";
 	};
 
 	return (
@@ -87,9 +87,9 @@ export function AboutTab({
 				</p>
 			</div>
 
-			<div className="setting-group-label">Software Updates</div>
+			<div className="setting-group-label">Software-Updates</div>
 			<div className="setting-group">
-				<SettingRow icon={Download} label="Auto Update" desc="Update automatically on startup">
+				<SettingRow icon={Download} label="Automatische Updates" desc="Beim Start automatisch nach Updates suchen">
 					<label className="toggle-switch">
 						<input type="checkbox" checked={autoUpdate} onChange={toggleAutoUpdate} />
 						<span className="slider"></span>
@@ -106,19 +106,19 @@ export function AboutTab({
 				/>
 			</div>
 
-			<div className="setting-group-label setting-group-label--spaced">Data</div>
+			<div className="setting-group-label setting-group-label--spaced">Einstellungen sichern</div>
 			<div className="setting-group">
 				<SettingRow
 					icon={FileDown}
 					label={getExportLabel()}
-					desc="Save settings to a file"
+					desc="Einstellungen in Datei exportieren"
 					action
 					onClick={handleExportSettings}
 				/>
 				<SettingRow
 					icon={Upload}
 					label={getImportLabel()}
-					desc="Load settings from a file"
+					desc="Einstellungen aus Datei importieren"
 					action
 					divider={false}
 					onClick={handleImportSettings}

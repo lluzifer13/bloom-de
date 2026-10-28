@@ -32,7 +32,7 @@ export function GeneralTab({
 		<>
 			<div className="setting-group-label">System</div>
 			<div className="setting-group">
-				<SettingRow icon={Power} label="Launch at Login" desc="Open Bloom automatically">
+				<SettingRow icon={Power} label="Mit Windows starten" desc="Bloom beim Systemstart öffnen">
 					<label className="toggle-switch">
 						<input type="checkbox" checked={autostart} onChange={toggleAutostart} />
 						<span className="slider"></span>
@@ -41,8 +41,8 @@ export function GeneralTab({
 
 				<SettingRow
 					icon={Download}
-					label="Update Indicator"
-					desc="Show green dot when update available"
+					label="Update-Hinweis"
+					desc="Grünen Punkt anzeigen, wenn Update verfügbar"
 				>
 					<label className="toggle-switch">
 						<input type="checkbox" checked={showUpdateIndicator} onChange={toggleUpdateIndicator} />
@@ -50,7 +50,7 @@ export function GeneralTab({
 					</label>
 				</SettingRow>
 
-				<SettingRow icon={Clock} label="24-Hour Time" desc="Use 24-hour clock format">
+				<SettingRow icon={Clock} label="24-Stunden-Format" desc="24-Stunden-Uhrzeit verwenden">
 					<label className="toggle-switch">
 						<input type="checkbox" checked={timeFormat24h} onChange={toggleTimeFormat24h} />
 						<span className="slider"></span>
@@ -59,8 +59,8 @@ export function GeneralTab({
 
 				<SettingRow
 					icon={BatteryWarning}
-					label="Low Battery Alert"
-					desc={`Trigger at ${lowBatteryThreshold}%`}
+					label="Akkustand-Warnung"
+					desc={`Warnung bei ${lowBatteryThreshold}%`}
 					divider={false}
 				>
 					<input
@@ -75,27 +75,27 @@ export function GeneralTab({
 				</SettingRow>
 			</div>
 
-			<div className="setting-group-label">App</div>
+			<div className="setting-group-label">Anwendung</div>
 			<div className="setting-group">
 				<SettingRow
 					icon={RotateCcw}
-					label="Reset to Defaults"
-					desc="Restore all settings and restart Bloom"
+					label="Auf Standard zurücksetzen"
+					desc="Alle Einstellungen zurücksetzen und Bloom neu starten"
 					action
 					danger
 					onClick={resetToDefaults}
 				/>
 				<SettingRow
 					icon={RefreshCw}
-					label="Restart Bloom"
-					desc="Reinitialize all components"
+					label="Bloom neu starten"
+					desc="Alle Komponenten neu initialisieren"
 					action
 					onClick={restartBloom}
 				/>
 				<SettingRow
 					icon={LogOut}
-					label="Quit Bloom"
-					desc="Exit application completely"
+					label="Bloom beenden"
+					desc="Anwendung vollständig beenden"
 					action
 					danger
 					onClick={quitBloom}
