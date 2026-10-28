@@ -1053,6 +1053,12 @@ function App() {
 	}, [windowLabel]);
 
 	// Settings state
+	const [geminiEnabled, setGeminiEnabled] = useState(
+		() => localStorage.getItem("bloom-gemini-quick-prompt") !== "false"
+	);
+	const [antigravityEnabled, setAntigravityEnabled] = useState(
+		() => localStorage.getItem("bloom-antigravity-launcher") !== "false"
+	);
 	const [settingsWeatherEnabled, setSettingsWeatherEnabled] = useState(
 		() => localStorage.getItem("bloom-weather-enabled") !== "false"
 	);
@@ -3992,44 +3998,6 @@ function App() {
 												</div>
 											</div>
 
-											{/* Gemini Quick Prompt Bar */}
-											<div
-												className="cc-ai-prompt-bar"
-												style={{
-													display: "flex",
-													gap: "8px",
-													marginBottom: "12px",
-													background: "rgba(255, 255, 255, 0.08)",
-													borderRadius: "12px",
-													padding: "7px 12px",
-													alignItems: "center",
-													border: "1px solid rgba(255, 255, 255, 0.1)"
-												}}
-											>
-												<Sparkles size={15} style={{ color: "#7aa2f7", flexShrink: 0 }} />
-												<input
-													type="text"
-													placeholder="Frage an Gemini stellen (Enter)..."
-													onKeyDown={(e) => {
-														if (e.key === "Enter" && e.currentTarget.value.trim()) {
-															e.stopPropagation();
-															openUrl(`https://gemini.google.com/app?q=${encodeURIComponent(e.currentTarget.value.trim())}`);
-															e.currentTarget.value = "";
-														}
-													}}
-													onClick={(e) => e.stopPropagation()}
-													style={{
-														background: "transparent",
-														border: "none",
-														outline: "none",
-														color: "#ffffff",
-														fontSize: "13px",
-														width: "100%",
-														fontFamily: "inherit"
-													}}
-												/>
-											</div>
-
 											{/* Circular Actions Row */}
 											<div className="cc-circular-actions-row">
 												<button
@@ -4074,28 +4042,30 @@ function App() {
 												>
 													<BellIcon />
 												</button>
-												<button
-													className="cc-circular-btn"
-													onClick={(e) => {
-														e.stopPropagation();
-														openUrl("https://gemini.google.com");
-													}}
-													title="Gemini KI öffnen"
-												>
-													<Sparkles size={16} />
-												</button>
-												<button
-													className="cc-circular-btn"
-													onClick={(e) => {
-														e.stopPropagation();
-														invoke("open_app", { appName: "wt" }).catch(() => {
-															invoke("open_app", { appName: "cmd" }).catch(console.error);
-														});
-													}}
-													title="Antigravity / Terminal öffnen"
-												>
-													<Terminal size={16} />
-												</button>
+												{geminiEnabled && (
+													<button
+														className="cc-circular-btn"
+														onClick={(e) => {
+															e.stopPropagation();
+															invoke("open_app", { appName: "gemini-app" }).catch(console.error);
+														}}
+														title="Gemini App öffnen"
+													>
+														<Sparkles size={16} />
+													</button>
+												)}
+												{antigravityEnabled && (
+													<button
+														className="cc-circular-btn"
+														onClick={(e) => {
+															e.stopPropagation();
+															invoke("open_app", { appName: "antigravity-app" }).catch(console.error);
+														}}
+														title="Antigravity App öffnen"
+													>
+														<Terminal size={16} />
+													</button>
+												)}
 												<button
 													className="cc-circular-btn"
 													onClick={(e) => {

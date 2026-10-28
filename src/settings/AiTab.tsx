@@ -1,36 +1,28 @@
-import { Sparkles, Terminal, Bot, Layers, ExternalLink } from "lucide-react";
-import { openUrl } from "@tauri-apps/plugin-opener";
+import { Sparkles, Terminal, ExternalLink } from "lucide-react";
+import { invoke } from "@tauri-apps/api/core";
 import { SettingRow } from "./SettingRow";
 
 interface AiTabProps {
 	geminiQuickPrompt: boolean;
 	toggleGeminiQuickPrompt: () => void;
-	geminiDockApp: boolean;
-	toggleGeminiDockApp: () => void;
 	antigravityLauncher: boolean;
 	toggleAntigravityLauncher: () => void;
-	aiShelf: boolean;
-	toggleAiShelf: () => void;
 }
 
 export function AiTab({
 	geminiQuickPrompt,
 	toggleGeminiQuickPrompt,
-	geminiDockApp,
-	toggleGeminiDockApp,
 	antigravityLauncher,
-	toggleAntigravityLauncher,
-	aiShelf,
-	toggleAiShelf
+	toggleAntigravityLauncher
 }: AiTabProps) {
 	return (
 		<>
-			<div className="setting-group-label">Gemini KI-Integration</div>
+			<div className="setting-group-label">Gemini</div>
 			<div className="setting-group">
 				<SettingRow
 					icon={Sparkles}
-					label="Gemini Schnell-Prompt"
-					desc="Schnellzugriff & Prompt-Eingabe direkt aus der Notch"
+					label="Gemini Button in der Notch"
+					desc="1-Klick Schnellstart für deine Gemini App"
 				>
 					<label className="toggle-switch">
 						<input
@@ -43,36 +35,21 @@ export function AiTab({
 				</SettingRow>
 
 				<SettingRow
-					icon={Bot}
-					label="Gemini Web-App im Dock"
-					desc="Eigenständiges rahmenloses App-Fenster für Gemini"
-				>
-					<label className="toggle-switch">
-						<input
-							type="checkbox"
-							checked={geminiDockApp}
-							onChange={toggleGeminiDockApp}
-						/>
-						<span className="slider"></span>
-					</label>
-				</SettingRow>
-
-				<SettingRow
 					icon={ExternalLink}
-					label="Gemini öffnen"
-					desc="Gemini Web-Interface im Browser starten"
+					label="Gemini App jetzt starten"
+					desc="Öffnet die installierte Gemini Windows-App"
 					action
 					divider={false}
-					onClick={() => openUrl("https://gemini.google.com")}
+					onClick={() => invoke("open_app", { appName: "gemini-app" }).catch(console.error)}
 				/>
 			</div>
 
-			<div className="setting-group-label">Entwickler & Antigravity</div>
+			<div className="setting-group-label">Antigravity</div>
 			<div className="setting-group">
 				<SettingRow
 					icon={Terminal}
-					label="Antigravity Schnellstart"
-					desc="1-Klick Workspace & Terminal-Launcher in der Notch"
+					label="Antigravity Button in der Notch"
+					desc="1-Klick Schnellstart für die Antigravity Desktop-App"
 				>
 					<label className="toggle-switch">
 						<input
@@ -85,20 +62,13 @@ export function AiTab({
 				</SettingRow>
 
 				<SettingRow
-					icon={Layers}
-					label="Smarte KI-Ablage"
-					desc="Dateien in der Notch ablegen und als Prompt bereitstellen"
+					icon={ExternalLink}
+					label="Antigravity jetzt starten"
+					desc="Öffnet die installierte Antigravity IDE / App"
+					action
 					divider={false}
-				>
-					<label className="toggle-switch">
-						<input
-							type="checkbox"
-							checked={aiShelf}
-							onChange={toggleAiShelf}
-						/>
-						<span className="slider"></span>
-					</label>
-				</SettingRow>
+					onClick={() => invoke("open_app", { appName: "antigravity-app" }).catch(console.error)}
+				/>
 			</div>
 		</>
 	);

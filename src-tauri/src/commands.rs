@@ -661,6 +661,44 @@ fn toggle_start_menu() {
 
 #[tauri::command]
 pub async fn open_app(app: AppHandle, app_name: String) {
+    if app_name == "gemini-app" {
+        if let Ok(appdata) = std::env::var("APPDATA") {
+            let lnk = format!("{}\Microsoft\Windows\Start Menu\Programs\Gemini.lnk", appdata);
+            if std::path::Path::new(&lnk).exists() {
+                tauri::async_runtime::spawn_blocking(move || launch_path(&lnk));
+                return;
+            }
+        }
+        tauri::async_runtime::spawn_blocking(move || launch_path("https://gemini.google.com"));
+        return;
+    }
+
+    if app_name == "antigravity-app" {
+        if let Ok(appdata) = std::env::var("APPDATA") {
+            let lnk = format!("{}\Microsoft\Windows\Start Menu\Programs\Antigravity.lnk", appdata);
+            if std::path::Path::new(&lnk).exists() {
+                tauri::async_runtime::spawn_blocking(move || launch_path(&lnk));
+                return;
+            }
+            let ide_lnk = format!("{}\Microsoft\Windows\Start Menu\Programs\Antigravity IDE\Antigravity IDE.lnk", appdata);
+            if std::path::Path::new(&ide_lnk).exists() {
+                tauri::async_runtime::spawn_blocking(move || launch_path(&ide_lnk));
+                return;
+            }
+        }
+        if let Ok(local) = std::env::var("LOCALAPPDATA") {
+            let exe = format!("{}\Programs\antigravity\Antigravity.exe", local);
+            if std::path::Path::new(&exe).exists() {
+                tauri::async_runtime::spawn_blocking(move || launch_path(&exe));
+                return;
+            }
+            let ide_exe = format!("{}\Programs\Antigravity IDE\Antigravity IDE.exe", local);
+            if std::path::Path::new(&ide_exe).exists() {
+                tauri::async_runtime::spawn_blocking(move || launch_path(&ide_exe));
+                return;
+            }
+        }
+    }
     if app_name == "start" {
         toggle_start_menu();
         return;

@@ -311,12 +311,8 @@ function SettingsApp() {
 						<AiTab
 							geminiQuickPrompt={settings.geminiQuickPrompt}
 						toggleGeminiQuickPrompt={settings.toggleGeminiQuickPrompt}
-							geminiDockApp={settings.geminiDockApp}
-						toggleGeminiDockApp={settings.toggleGeminiDockApp}
 							antigravityLauncher={settings.antigravityLauncher}
 						toggleAntigravityLauncher={settings.toggleAntigravityLauncher}
-							aiShelf={settings.aiShelf}
-						toggleAiShelf={settings.toggleAiShelf}
 						/>
 					)}
 					{activeTab === "about" && (
