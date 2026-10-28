@@ -1266,6 +1266,8 @@ function App() {
 	// Settings sync — consolidated dispatch for all settings events
 	useSettingsSync(
 		{
+			"bloom-gemini-quick-prompt": setGeminiEnabled,
+			"bloom-antigravity-launcher": setAntigravityEnabled,
 			"bloom-weather-enabled": setSettingsWeatherEnabled,
 			"bloom-calendar-enabled": setSettingsCalendarEnabled,
 			"bloom-notch-command-center-enabled": setSettingsControlsPanelEnabled,
