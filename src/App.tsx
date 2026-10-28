@@ -30,6 +30,7 @@ import { useSettingsSync } from "./hooks/useSettingsSync";
 import { useTrailingThrottle } from "./hooks/useTrailingThrottle";
 import { useAnnouncement } from "./hooks/useAnnouncement";
 import { reloadIfMirrorWasStale } from "./hooks/settingsMirror";
+import { Sparkles, Terminal } from "lucide-react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { startDrag } from "@crabnebula/tauri-plugin-drag";
@@ -3991,6 +3992,44 @@ function App() {
 												</div>
 											</div>
 
+											{/* Gemini Quick Prompt Bar */}
+											<div
+												className="cc-ai-prompt-bar"
+												style={{
+													display: "flex",
+													gap: "8px",
+													marginBottom: "12px",
+													background: "rgba(255, 255, 255, 0.08)",
+													borderRadius: "12px",
+													padding: "7px 12px",
+													alignItems: "center",
+													border: "1px solid rgba(255, 255, 255, 0.1)"
+												}}
+											>
+												<Sparkles size={15} style={{ color: "#7aa2f7", flexShrink: 0 }} />
+												<input
+													type="text"
+													placeholder="Frage an Gemini stellen (Enter)..."
+													onKeyDown={(e) => {
+														if (e.key === "Enter" && e.currentTarget.value.trim()) {
+															e.stopPropagation();
+															openUrl(`https://gemini.google.com/app?q=${encodeURIComponent(e.currentTarget.value.trim())}`);
+															e.currentTarget.value = "";
+														}
+													}}
+													onClick={(e) => e.stopPropagation()}
+													style={{
+														background: "transparent",
+														border: "none",
+														outline: "none",
+														color: "#ffffff",
+														fontSize: "13px",
+														width: "100%",
+														fontFamily: "inherit"
+													}}
+												/>
+											</div>
+
 											{/* Circular Actions Row */}
 											<div className="cc-circular-actions-row">
 												<button
@@ -4034,6 +4073,28 @@ function App() {
 													title="Benachrichtigungen"
 												>
 													<BellIcon />
+												</button>
+												<button
+													className="cc-circular-btn"
+													onClick={(e) => {
+														e.stopPropagation();
+														openUrl("https://gemini.google.com");
+													}}
+													title="Gemini KI öffnen"
+												>
+													<Sparkles size={16} />
+												</button>
+												<button
+													className="cc-circular-btn"
+													onClick={(e) => {
+														e.stopPropagation();
+														invoke("open_app", { appName: "wt" }).catch(() => {
+															invoke("open_app", { appName: "cmd" }).catch(console.error);
+														});
+													}}
+													title="Antigravity / Terminal öffnen"
+												>
+													<Terminal size={16} />
 												</button>
 												<button
 													className="cc-circular-btn"
