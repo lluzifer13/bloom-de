@@ -4458,3 +4458,23 @@ pub async fn activate_tray_icon(tray_id: String) -> Result<(), String> {
         .map_err(|e| e.to_string())?
 }
 
+
+#[tauri::command]
+pub async fn focus_notch(app: AppHandle, focus: bool) {
+    if let Some(win) = app.get_webview_window("main") {
+        if let Ok(hwnd) = win.hwnd() {
+            unsafe {
+                use windows::Win32::UI::WindowsAndMessaging::{SetForegroundWindow, SetWindowLongPtrW, GetWindowLongPtrW, GWL_EXSTYLE, WS_EX_NOACTIVATE};
+                if focus {
+                    let ex = GetWindowLongPtrW(hwnd, GWL_EXSTYLE) as usize;
+                    let _ = SetWindowLongPtrW(hwnd, GWL_EXSTYLE, (ex & !(WS_EX_NOACTIVATE.0 as usize)) as isize);
+                    let _ = win.set_focus();
+                    let _ = SetForegroundWindow(hwnd);
+                } else {
+                    let ex = GetWindowLongPtrW(hwnd, GWL_EXSTYLE) as usize;
+                    let _ = SetWindowLongPtrW(hwnd, GWL_EXSTYLE, (ex | (WS_EX_NOACTIVATE.0 as usize)) as isize);
+                }
+            }
+        }
+    }
+}

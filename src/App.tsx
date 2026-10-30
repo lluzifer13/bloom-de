@@ -30,6 +30,7 @@ import { useSettingsSync } from "./hooks/useSettingsSync";
 import { useTrailingThrottle } from "./hooks/useTrailingThrottle";
 import { useAnnouncement } from "./hooks/useAnnouncement";
 import { reloadIfMirrorWasStale } from "./hooks/settingsMirror";
+import { Sparkles, Terminal, Send, ExternalLink, Bot } from "lucide-react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { startDrag } from "@crabnebula/tauri-plugin-drag";
@@ -75,8 +76,8 @@ import {
  *   Dragging files onto the notch also opens the shelf. Wheel/swipe switches
  *   between tool panels, including when a live activity occupies the pill.
  */
-type NotchPanel = "calendar" | "command-center" | "devices";
-const NOTCH_PANELS: readonly NotchPanel[] = ["calendar", "command-center", "devices"];
+type NotchPanel = "calendar" | "command-center" | "devices" | "ai";
+const NOTCH_PANELS: readonly NotchPanel[] = ["calendar", "command-center", "devices", "ai"];
 const asNotchPanel = (value: unknown): NotchPanel | null =>
 	NOTCH_PANELS.includes(value as NotchPanel) ? (value as NotchPanel) : null;
 
@@ -1072,6 +1073,25 @@ function App() {
 	}, [windowLabel]);
 
 	// Settings state
+		// AI & Antigravity Panel state
+	const [aiModel, setAiModel] = useState("gemini-2.5-flash");
+	const [aiPrompt, setAiPrompt] = useState("");
+	const [aiIsFocused, setAiIsFocused] = useState(false);
+
+	const handleAiFocus = (focus: boolean) => {
+		setAiIsFocused(focus);
+		invoke("focus_notch", { focus }).catch(console.error);
+	};
+
+	const submitAiPrompt = () => {
+		if (!aiPrompt.trim()) return;
+		const query = encodeURIComponent(aiPrompt.trim());
+		// Open Gemini or launch Antigravity with prompt
+		openUrl(`https://gemini.google.com/app?q=${query}`);
+		setAiPrompt("");
+		handleAiFocus(false);
+	};
+
 	const [settingsWeatherEnabled, setSettingsWeatherEnabled] = useState(
 		() => localStorage.getItem("bloom-weather-enabled") !== "false"
 	);
@@ -1932,6 +1952,7 @@ function App() {
 	function panelEnabled(panel: NotchPanel) {
 		if (panel === "calendar") return settingsCalendarEnabled;
 		if (panel === "command-center") return settingsControlsPanelEnabled;
+		if (panel === "ai") return true;
 		return settingsDevicesPanelEnabled;
 	}
 
@@ -4224,6 +4245,159 @@ function App() {
 													Learn more
 												</button>
 											)}
+										</motion.div>
+									)}
+								</AnimatePresence>
+
+								{/* AI & Antigravity Panel View */}
+								<AnimatePresence>
+									{bloomMode === "ai" && (
+										<motion.div
+											key="ai-view"
+											className="cc-controls-content"
+											style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											exit={{ opacity: 0, filter: "blur(4px)", transition: { duration: 0.1 } }}
+											transition={{ type: "spring", stiffness: 400, damping: 30 }}
+										>
+											{/* Header Row */}
+											<div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+												<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+													<Sparkles size={16} style={{ color: "#7aa2f7" }} />
+													<span style={{ fontSize: "13px", fontWeight: 600, color: "#fff" }}>KI Assistent</span>
+												</div>
+
+												{/* Quick launcher buttons */}
+												<div style={{ display: "flex", gap: "6px" }}>
+													<button
+														onClick={(e) => {
+															e.stopPropagation();
+															invoke("open_app", { appName: "antigravity-app" }).catch(console.error);
+														}}
+														style={{
+															display: "flex",
+															alignItems: "center",
+															gap: "5px",
+															padding: "4px 8px",
+															fontSize: "11px",
+															background: "rgba(255, 255, 255, 0.1)",
+															border: "1px solid rgba(255, 255, 255, 0.15)",
+															borderRadius: "6px",
+															color: "#fff",
+															cursor: "pointer"
+														}}
+														title="Antigravity IDE öffnen"
+													>
+														<Terminal size={12} />
+														<span>Antigravity</span>
+													</button>
+													<button
+														onClick={(e) => {
+															e.stopPropagation();
+															invoke("open_app", { appName: "gemini-app" }).catch(console.error);
+														}}
+														style={{
+															display: "flex",
+															alignItems: "center",
+															gap: "5px",
+															padding: "4px 8px",
+															fontSize: "11px",
+															background: "rgba(255, 255, 255, 0.1)",
+															border: "1px solid rgba(255, 255, 255, 0.15)",
+															borderRadius: "6px",
+															color: "#fff",
+															cursor: "pointer"
+														}}
+														title="Gemini öffnen"
+													>
+														<Sparkles size={12} />
+														<span>Gemini</span>
+													</button>
+												</div>
+											</div>
+
+											{/* Model Selection Selector */}
+											<div style={{ display: "flex", gap: "6px" }}>
+												{[
+													{ id: "gemini-2.5-flash", label: "Gemini Flash" },
+													{ id: "gemini-2.5-pro", label: "Gemini Pro" },
+													{ id: "antigravity", label: "Antigravity" }
+												].map((m) => (
+													<button
+														key={m.id}
+														onClick={(e) => {
+															e.stopPropagation();
+															setAiModel(m.id);
+														}}
+														style={{
+															padding: "3px 8px",
+															fontSize: "10px",
+															borderRadius: "12px",
+															border: aiModel === m.id ? "1px solid #7aa2f7" : "1px solid rgba(255, 255, 255, 0.1)",
+															background: aiModel === m.id ? "rgba(122, 162, 247, 0.2)" : "rgba(255, 255, 255, 0.05)",
+															color: aiModel === m.id ? "#7aa2f7" : "rgba(255, 255, 255, 0.7)",
+															cursor: "pointer",
+															fontWeight: aiModel === m.id ? 600 : 400
+														}}
+													>
+														{m.label}
+													</button>
+												))}
+											</div>
+
+											{/* Prompt Input Box with focus management */}
+											<div
+												style={{
+													display: "flex",
+													alignItems: "center",
+													background: "rgba(255, 255, 255, 0.07)",
+													borderRadius: "10px",
+													padding: "6px 10px",
+													border: aiIsFocused ? "1px solid #7aa2f7" : "1px solid rgba(255, 255, 255, 0.12)"
+												}}
+											>
+												<input
+													type="text"
+													value={aiPrompt}
+													onChange={(e) => setAiPrompt(e.target.value)}
+													onFocus={() => handleAiFocus(true)}
+													onBlur={() => handleAiFocus(false)}
+													onKeyDown={(e) => {
+														if (e.key === "Enter") {
+															e.stopPropagation();
+															submitAiPrompt();
+														}
+													}}
+													onClick={(e) => e.stopPropagation()}
+													placeholder="Prompt eingeben..."
+													style={{
+														flex: 1,
+														background: "transparent",
+														border: "none",
+														outline: "none",
+														color: "#ffffff",
+														fontSize: "12px",
+														fontFamily: "inherit"
+													}}
+												/>
+												<button
+													onClick={(e) => {
+														e.stopPropagation();
+														submitAiPrompt();
+													}}
+													style={{
+														background: "none",
+														border: "none",
+														color: aiPrompt.trim() ? "#7aa2f7" : "rgba(255, 255, 255, 0.3)",
+														cursor: aiPrompt.trim() ? "pointer" : "default",
+														display: "flex",
+														alignItems: "center"
+													}}
+												>
+													<Send size={14} />
+												</button>
+											</div>
 										</motion.div>
 									)}
 								</AnimatePresence>

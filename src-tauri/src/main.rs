@@ -137,6 +137,7 @@ fn main() {
             change_notch_mode,
             sync_appbar,
             open_app,
+            focus_notch,
             launch_new_instance,
             update_dock_rect,
             update_notch_rect,
