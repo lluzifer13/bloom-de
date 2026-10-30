@@ -1698,7 +1698,8 @@ function App() {
 			prev === "shelf" ||
 			prev === "wifi" ||
 			prev === "bluetooth" ||
-			prev === "devices"
+			prev === "devices" ||
+			prev === "ai"
 				? restingModeRef.current
 				: prev
 		);
@@ -3083,6 +3084,7 @@ function App() {
 		if (isCalendarMode) return 480;
 		if (bloomMode === "shelf") return 380;
 		if (bloomMode === "command-center" && isOpen) return 350;
+		if (bloomMode === "ai" && isOpen) return 350;
 		if (bloomMode === "wifi" || bloomMode === "bluetooth" || bloomMode === "devices") return 350;
 		if (showMusicOnStatusHover) {
 			return 170 + (settingsVisualizerEnabled ? 30 : 0);
@@ -3123,6 +3125,7 @@ function App() {
 			return shelfOverflowing ? 190 : 176;
 		}
 		if (bloomMode === "command-center") return isOpen ? 230 : 36;
+		if (bloomMode === "ai") return isOpen ? 200 : 36;
 		if (bloomMode === "devices") {
 			return devicesPanelHeight;
 		}
@@ -4255,8 +4258,9 @@ function App() {
 									{bloomMode === "ai" && (
 										<motion.div
 											key="ai-view"
-											className="cc-controls-content"
-											style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}
+											className="command-center-content-minimal"
+											onClick={(e) => e.stopPropagation()}
+											style={{ padding: "14px 16px", display: "flex", flexDirection: "column", justifyContent: "flex-start", gap: "12px", width: "100%" }}
 											initial={{ opacity: 0 }}
 											animate={{ opacity: 1 }}
 											exit={{ opacity: 0, filter: "blur(4px)", transition: { duration: 0.1 } }}
