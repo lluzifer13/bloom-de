@@ -30,7 +30,7 @@ import { useSettingsSync } from "./hooks/useSettingsSync";
 import { useTrailingThrottle } from "./hooks/useTrailingThrottle";
 import { useAnnouncement } from "./hooks/useAnnouncement";
 import { reloadIfMirrorWasStale } from "./hooks/settingsMirror";
-import { Sparkles, Terminal, Send, ExternalLink, Bot } from "lucide-react";
+import { Sparkles, Terminal, Send } from "lucide-react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { startDrag } from "@crabnebula/tauri-plugin-drag";
@@ -474,7 +474,8 @@ type BloomMode =
 	| "wifi"
 	| "bluetooth"
 	| "devices"
-	| "device";
+	| "device"
+	| "ai";
 
 // A device that just connected or disconnected, shown briefly in the pill.
 interface DeviceAlert {
