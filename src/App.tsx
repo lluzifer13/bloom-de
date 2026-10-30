@@ -30,7 +30,6 @@ import { useSettingsSync } from "./hooks/useSettingsSync";
 import { useTrailingThrottle } from "./hooks/useTrailingThrottle";
 import { useAnnouncement } from "./hooks/useAnnouncement";
 import { reloadIfMirrorWasStale } from "./hooks/settingsMirror";
-import { Sparkles, Terminal } from "lucide-react";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import { startDrag } from "@crabnebula/tauri-plugin-drag";
@@ -1073,12 +1072,6 @@ function App() {
 	}, [windowLabel]);
 
 	// Settings state
-	const [geminiEnabled, setGeminiEnabled] = useState(
-		() => localStorage.getItem("bloom-gemini-quick-prompt") !== "false"
-	);
-	const [antigravityEnabled, setAntigravityEnabled] = useState(
-		() => localStorage.getItem("bloom-antigravity-launcher") !== "false"
-	);
 	const [settingsWeatherEnabled, setSettingsWeatherEnabled] = useState(
 		() => localStorage.getItem("bloom-weather-enabled") !== "false"
 	);
@@ -1286,8 +1279,6 @@ function App() {
 	// Settings sync — consolidated dispatch for all settings events
 	useSettingsSync(
 		{
-			"bloom-gemini-quick-prompt": setGeminiEnabled,
-			"bloom-antigravity-launcher": setAntigravityEnabled,
 			"bloom-weather-enabled": setSettingsWeatherEnabled,
 			"bloom-calendar-enabled": setSettingsCalendarEnabled,
 			"bloom-notch-command-center-enabled": setSettingsControlsPanelEnabled,
@@ -4064,30 +4055,6 @@ function App() {
 												>
 													<BellIcon />
 												</button>
-												{geminiEnabled && (
-													<button
-														className="cc-circular-btn"
-														onClick={(e) => {
-															e.stopPropagation();
-															invoke("open_app", { appName: "gemini-app" }).catch(console.error);
-														}}
-														title="Gemini App öffnen"
-													>
-														<Sparkles size={16} />
-													</button>
-												)}
-												{antigravityEnabled && (
-													<button
-														className="cc-circular-btn"
-														onClick={(e) => {
-															e.stopPropagation();
-															invoke("open_app", { appName: "antigravity-app" }).catch(console.error);
-														}}
-														title="Antigravity App öffnen"
-													>
-														<Terminal size={16} />
-													</button>
-												)}
 												<button
 													className="cc-circular-btn"
 													onClick={(e) => {

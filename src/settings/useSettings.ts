@@ -71,51 +71,6 @@ export function useSettings() {
 	const [mediaLayout, setMediaLayout] = useState<"classic" | "compact">(
 		() => (localStorage.getItem("bloom-media-layout") as "classic" | "compact") || "classic"
 	);
-		const [geminiQuickPrompt, setGeminiQuickPrompt] = useState(
-		() => localStorage.getItem("bloom-gemini-quick-prompt") !== "false"
-	);
-	const [geminiDockApp, setGeminiDockApp] = useState(
-		() => localStorage.getItem("bloom-gemini-dock-app") === "true"
-	);
-	const [antigravityLauncher, setAntigravityLauncher] = useState(
-		() => localStorage.getItem("bloom-antigravity-launcher") !== "false"
-	);
-	const [aiShelf, setAiShelf] = useState(
-		() => localStorage.getItem("bloom-ai-shelf") !== "false"
-	);
-
-	const toggleGeminiQuickPrompt = useCallback(() => {
-		setGeminiQuickPrompt((prev) => {
-			const next = !prev;
-			localStorage.setItem("bloom-gemini-quick-prompt", String(next));
-			return next;
-		});
-	}, []);
-
-	const toggleGeminiDockApp = useCallback(() => {
-		setGeminiDockApp((prev) => {
-			const next = !prev;
-			localStorage.setItem("bloom-gemini-dock-app", String(next));
-			return next;
-		});
-	}, []);
-
-	const toggleAntigravityLauncher = useCallback(() => {
-		setAntigravityLauncher((prev) => {
-			const next = !prev;
-			localStorage.setItem("bloom-antigravity-launcher", String(next));
-			return next;
-		});
-	}, []);
-
-	const toggleAiShelf = useCallback(() => {
-		setAiShelf((prev) => {
-			const next = !prev;
-			localStorage.setItem("bloom-ai-shelf", String(next));
-			return next;
-		});
-	}, []);
-
 	const [cornersEnabled, setCornersEnabled] = useState(
 		() => localStorage.getItem("bloom-corners-enabled") === "true"
 	);
@@ -1133,16 +1088,6 @@ export function useSettings() {
 		importStatus,
 		handleExportSettings,
 		handleImportSettings,
-
-				// AI & Developer Tools
-		geminiQuickPrompt,
-		toggleGeminiQuickPrompt,
-		geminiDockApp,
-		toggleGeminiDockApp,
-		antigravityLauncher,
-		toggleAntigravityLauncher,
-		aiShelf,
-		toggleAiShelf,
 
 		// Utilities
 		restartBloom: () => invoke("restart_bloom"),

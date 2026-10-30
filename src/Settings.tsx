@@ -4,7 +4,7 @@ import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { Effect } from "@tauri-apps/api/window";
 import { invoke } from "@tauri-apps/api/core";
 import { openUrl } from "@tauri-apps/plugin-opener";
-import { X, Settings, Palette, PanelTop, Monitor, Layers, Sparkles, Info, Megaphone } from "lucide-react";
+import { X, Settings, Palette, PanelTop, Monitor, Layers, Info, Megaphone } from "lucide-react";
 import {
 	useSettings,
 	GeneralTab,
@@ -12,7 +12,6 @@ import {
 	NotchTab,
 	DockTab,
 	OverlaysTab,
-	AiTab,
 	AboutTab
 } from "./settings/index";
 import type { SettingsTab } from "./settings/index";
@@ -29,7 +28,6 @@ const TABS: { id: SettingsTab; label: string; icon: typeof Settings }[] = [
 	{ id: "notch", label: "Notch", icon: PanelTop },
 	{ id: "dock", label: "Dock", icon: Monitor },
 	{ id: "overlays", label: "Overlays", icon: Layers },
-	{ id: "ai", label: "KI & Tools", icon: Sparkles },
 	{ id: "about", label: "Über", icon: Info }
 ];
 
@@ -39,7 +37,6 @@ const TAB_COPY: Record<SettingsTab, string> = {
 	notch: "Wähle, was oben am Bildschirmrand angezeigt wird.",
 	dock: "Passe das Dock an deinen Arbeitsablauf an.",
 	overlays: "Steuerelemente nur anzeigen, wenn du sie brauchst.",
-	ai: "Gemini Schnellzugriff, Antigravity & Entwickler-Werkzeuge.",
 	about: "Version, Updates und Einstellungen."
 };
 
@@ -305,14 +302,6 @@ function SettingsApp() {
 							toggleBrightnessOverlay={settings.toggleBrightnessOverlay}
 							brightnessEdgeEnabled={settings.brightnessEdgeEnabled}
 							toggleBrightnessEdge={settings.toggleBrightnessEdge}
-						/>
-					)}
-										{activeTab === "ai" && (
-						<AiTab
-							geminiQuickPrompt={settings.geminiQuickPrompt}
-						toggleGeminiQuickPrompt={settings.toggleGeminiQuickPrompt}
-							antigravityLauncher={settings.antigravityLauncher}
-						toggleAntigravityLauncher={settings.toggleAntigravityLauncher}
 						/>
 					)}
 					{activeTab === "about" && (

@@ -5,6 +5,5 @@ export { AppearanceTab } from "./AppearanceTab";
 export { NotchTab } from "./NotchTab";
 export { DockTab } from "./DockTab";
 export { OverlaysTab } from "./OverlaysTab";
-export { AiTab } from "./AiTab";
 export { AboutTab } from "./AboutTab";
 export type { WidgetConfig, SettingsTab, SettingRowProps } from "./types";
