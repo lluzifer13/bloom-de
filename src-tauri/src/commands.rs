@@ -663,7 +663,7 @@ fn toggle_start_menu() {
 pub async fn open_app(app: AppHandle, app_name: String) {
     if app_name == "gemini-app" {
         if let Ok(appdata) = std::env::var("APPDATA") {
-            let lnk = format!("{}\Microsoft\Windows\Start Menu\Programs\Gemini.lnk", appdata);
+            let lnk = format!(r"{}\Microsoft\Windows\Start Menu\Programs\Gemini.lnk", appdata);
             if std::path::Path::new(&lnk).exists() {
                 tauri::async_runtime::spawn_blocking(move || launch_path(&lnk));
                 return;
@@ -675,24 +675,24 @@ pub async fn open_app(app: AppHandle, app_name: String) {
 
     if app_name == "antigravity-app" {
         if let Ok(appdata) = std::env::var("APPDATA") {
-            let lnk = format!("{}\Microsoft\Windows\Start Menu\Programs\Antigravity.lnk", appdata);
+            let lnk = format!(r"{}\Microsoft\Windows\Start Menu\Programs\Antigravity.lnk", appdata);
             if std::path::Path::new(&lnk).exists() {
                 tauri::async_runtime::spawn_blocking(move || launch_path(&lnk));
                 return;
             }
-            let ide_lnk = format!("{}\Microsoft\Windows\Start Menu\Programs\Antigravity IDE\Antigravity IDE.lnk", appdata);
+            let ide_lnk = format!(r"{}\Microsoft\Windows\Start Menu\Programs\Antigravity IDE\Antigravity IDE.lnk", appdata);
             if std::path::Path::new(&ide_lnk).exists() {
                 tauri::async_runtime::spawn_blocking(move || launch_path(&ide_lnk));
                 return;
             }
         }
         if let Ok(local) = std::env::var("LOCALAPPDATA") {
-            let exe = format!("{}\Programs\antigravity\Antigravity.exe", local);
+            let exe = format!(r"{}\Programs\antigravity\Antigravity.exe", local);
             if std::path::Path::new(&exe).exists() {
                 tauri::async_runtime::spawn_blocking(move || launch_path(&exe));
                 return;
             }
-            let ide_exe = format!("{}\Programs\Antigravity IDE\Antigravity IDE.exe", local);
+            let ide_exe = format!(r"{}\Programs\Antigravity IDE\Antigravity IDE.exe", local);
             if std::path::Path::new(&ide_exe).exists() {
                 tauri::async_runtime::spawn_blocking(move || launch_path(&ide_exe));
                 return;
@@ -3369,15 +3369,19 @@ pub fn get_brightness() -> u32 {
 pub async fn get_wifi_status() -> Result<WifiStatus, String> {
     tauri::async_runtime::spawn_blocking(|| -> Result<WifiStatus, String> {
         let enabled = get_radio_state_sync(windows::Devices::Radios::RadioKind::WiFi)?;
-        let ssid = if enabled {
-            crate::wifi::connected_ssid()
+        let (ssid, signal) = if enabled {
+            match crate::wifi::connected_info() {
+                Some((s, sig)) => (Some(s), Some(sig)),
+                None => (None, None),
+            }
         } else {
-            None
+            (None, None)
         };
         Ok(WifiStatus {
             enabled,
             connected: ssid.is_some(),
             ssid,
+            signal,
         })
     })
     .await
@@ -4453,3 +4457,4 @@ pub async fn activate_tray_icon(tray_id: String) -> Result<(), String> {
         .await
         .map_err(|e| e.to_string())?
 }
+

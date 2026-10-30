@@ -82,6 +82,8 @@ pub struct WifiStatus {
     pub connected: bool,
     /// The connected network's name, for the controls tile.
     pub ssid: Option<String>,
+    /// Signal quality 0-100 of the connected network.
+    pub signal: Option<u32>,
 }
 
 #[derive(Clone, Serialize)]

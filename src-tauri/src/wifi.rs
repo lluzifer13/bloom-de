@@ -423,8 +423,8 @@ pub fn setup_wifi_notifications(app: AppHandle) {
     });
 }
 
-/// Name of the network the adapter is associated with, if any.
-pub fn connected_ssid() -> Option<String> {
+/// Name and signal quality (0-100) of the network the adapter is associated with, if any.
+pub fn connected_info() -> Option<(String, u32)> {
     let client = Client::open().ok()?;
     let iface = client.interface().ok()?;
     let mut size = 0u32;
@@ -440,12 +440,13 @@ pub fn connected_ssid() -> Option<String> {
             None,
         );
         // Fails with ERROR_INVALID_STATE while not associated.
-        let ssid = if rc == 0 {
+        let info = if rc == 0 {
             (data as *const WLAN_CONNECTION_ATTRIBUTES)
                 .as_ref()
                 .map(|attrs| {
-                    String::from_utf8_lossy(ssid_bytes(&attrs.wlanAssociationAttributes.dot11Ssid))
-                        .into_owned()
+                    let ssid = String::from_utf8_lossy(ssid_bytes(&attrs.wlanAssociationAttributes.dot11Ssid)).into_owned();
+                    let signal = attrs.wlanAssociationAttributes.wlanSignalQuality.min(100);
+                    (ssid, signal)
                 })
         } else {
             None
@@ -453,8 +454,12 @@ pub fn connected_ssid() -> Option<String> {
         if !data.is_null() {
             WlanFreeMemory(data);
         }
-        ssid
+        info
     }
+}
+
+pub fn connected_ssid() -> Option<String> {
+    connected_info().map(|(ssid, _)| ssid)
 }
 
 // ── Commands ─────────────────────────────────────────────────────────────────

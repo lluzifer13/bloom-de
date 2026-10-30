@@ -166,7 +166,14 @@ const playTimerChime = () => {
 };
 
 // Simple SVG icons
-function WifiIcon({ enabled, connected }: { enabled: boolean; connected: boolean }) {
+function WifiIcon({ enabled, connected, signal }: { enabled: boolean; connected: boolean; signal?: number | null }) {
+	const sig = signal ?? (connected ? 80 : 0);
+	// Bar opacities depending on signal strength (0-100)
+	const arc1 = connected && sig >= 25 ? 1 : 0.25;
+	const arc2 = connected && sig >= 50 ? 1 : 0.25;
+	const arc3 = connected && sig >= 75 ? 1 : 0.25;
+	const dot = connected ? 1 : 0.25;
+
 	return (
 		<svg
 			width="18"
@@ -177,12 +184,16 @@ function WifiIcon({ enabled, connected }: { enabled: boolean; connected: boolean
 			strokeWidth="2.5"
 			strokeLinecap="round"
 			strokeLinejoin="round"
-			opacity={!enabled ? 0.4 : connected ? 1 : 0.7}
+			opacity={!enabled ? 0.35 : 1}
 		>
-			<path d="M5 12.55a11 11 0 0 1 14.08 0" />
-			<path d="M1.42 9a16 16 0 0 1 21.16 0" />
-			<path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
-			<line x1="12" y1="20" x2="12.01" y2="20" />
+			{/* Top arc (strongest signal) */}
+			<path d="M1.42 9a16 16 0 0 1 21.16 0" strokeOpacity={arc3} />
+			{/* Middle arc */}
+			<path d="M5 12.55a11 11 0 0 1 14.08 0" strokeOpacity={arc2} />
+			{/* Low arc */}
+			<path d="M8.53 16.11a6 6 0 0 1 6.95 0" strokeOpacity={arc1} />
+			{/* Center dot */}
+			<line x1="12" y1="20" x2="12.01" y2="20" strokeOpacity={dot} />
 		</svg>
 	);
 }
@@ -255,7 +266,15 @@ function BatteryIcon({
 					width={Math.max(0.5, (percentage / 100) * 10.4)}
 					height="5"
 					rx="1"
-					fill={charging ? "#32D74B" : percentage <= threshold ? "#FF453A" : "white"}
+					fill={
+						charging
+							? "#32D74B"
+							: percentage <= threshold
+								? "#FF453A"
+								: percentage <= 40
+									? "#FF9F0A"
+									: "#32D74B"
+					}
 				/>
 			</svg>
 			{/* Charging Bolt - Centered on the battery body */}
@@ -424,6 +443,7 @@ interface WifiStatus {
 	enabled: boolean;
 	connected: boolean;
 	ssid: string | null;
+	signal?: number | null;
 }
 
 // A shelf file's preview from the backend: a picture when one can be made,
@@ -3892,7 +3912,7 @@ function App() {
 													title="Linksklick zum Umschalten, Rechtsklick für Netzwerke"
 												>
 													<div className="cc-pill-icon-wrapper">
-														<WifiIcon enabled={wifiEnabled} connected={wifiConnected} />
+														<WifiIcon enabled={wifiEnabled} connected={wifiConnected} signal={wifiStatus?.signal} />
 													</div>
 													<div className="cc-pill-info">
 														<span className="cc-pill-title">WLAN</span>
