@@ -2715,6 +2715,20 @@ pub fn set_volume(volume: f32) {
     }
 }
 
+#[tauri::command]
+pub fn toggle_mute() {
+    if let Some(sender) = COMMAND_SENDER.get() {
+        let _ = sender.send(crate::types::SystemCommand::ToggleMute);
+    }
+}
+
+#[tauri::command]
+pub fn set_mute(muted: bool) {
+    if let Some(sender) = COMMAND_SENDER.get() {
+        let _ = sender.send(crate::types::SystemCommand::SetMute(muted));
+    }
+}
+
 /// Full path of a running process, or `None` when it can't be opened.
 pub(crate) unsafe fn process_image_path(pid: u32) -> Option<String> {
     use windows::Win32::Foundation::CloseHandle;
@@ -3497,6 +3511,26 @@ pub fn open_battery_saver_settings() {
             SW_SHOWNORMAL,
         );
     }
+}
+
+#[tauri::command]
+pub async fn toggle_battery_saver(enable: bool) -> Result<(), String> {
+    tauri::async_runtime::spawn_blocking(move || {
+        use std::os::windows::process::CommandExt;
+        const CREATE_NO_WINDOW: u32 = 0x08000000;
+        let threshold = if enable { "100" } else { "20" };
+        let _ = std::process::Command::new("powercfg")
+            .args(&["/setdcvalueindex", "SCHEME_CURRENT", "SUB_ENERGYSAVER", "ESBATTTHRESHOLD", threshold])
+            .creation_flags(CREATE_NO_WINDOW)
+            .status();
+        let _ = std::process::Command::new("powercfg")
+            .args(&["/setactive", "SCHEME_CURRENT"])
+            .creation_flags(CREATE_NO_WINDOW)
+            .status();
+        Ok(())
+    })
+    .await
+    .map_err(|e| e.to_string())?
 }
 
 // --- System metrics for status widgets ---

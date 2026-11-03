@@ -2818,6 +2818,27 @@ function App() {
 		}
 	}, []);
 
+	const toggleBatterySaver = useCallback(async () => {
+		const nextState = !batterySaverEnabled;
+		setBatterySaverEnabled(nextState);
+		try {
+			await invoke("toggle_battery_saver", { enable: nextState });
+			setTimeout(() => {
+				invoke<boolean>("get_battery_saver_state")
+					.then((state) => setBatterySaverEnabled(state))
+					.catch(() => {});
+			}, 600);
+		} catch (e) {
+			console.error("Failed to toggle battery saver:", e);
+		}
+	}, [batterySaverEnabled]);
+
+	const handleToggleMute = useCallback((e: React.MouseEvent) => {
+		e.stopPropagation();
+		invoke("toggle_mute").catch(console.error);
+		setIsMuted((prev) => !prev);
+	}, []);
+
 	// Brightness change with throttling
 	const sendBrightness = useTrailingThrottle((newVal: number) => {
 		invoke("set_brightness", { brightness: newVal }).catch(() => {});
@@ -4037,9 +4058,14 @@ function App() {
 													className={`cc-circular-btn ${batterySaverEnabled ? "active" : ""}`}
 													onClick={(e) => {
 														e.stopPropagation();
+														toggleBatterySaver();
+													}}
+													onContextMenu={(e) => {
+														e.preventDefault();
+														e.stopPropagation();
 														openBatterySaverSettings();
 													}}
-													title={`Stromsparmodus: ${batterySaverEnabled ? "Ein" : "Aus"} — Klicken für Einstellungen`}
+													title={`Stromsparmodus: ${batterySaverEnabled ? "Ein" : "Aus"} — Linksklick: Umschalten, Rechtsklick: Einstellungen`}
 												>
 													<BatterySaverIcon />
 												</button>
@@ -4089,9 +4115,16 @@ function App() {
 											<div className="cc-classic-sliders-area">
 												{/* Volume Slider */}
 												<div className="cc-classic-slider-row">
-													<div className="cc-classic-slider-label">
-														<VolumeLowIcon style={{ opacity: 0.5 }} />
-														<span>Lautstärke</span>
+													<div
+														className="cc-classic-slider-label"
+														onClick={handleToggleMute}
+														style={{ cursor: "pointer", userSelect: "none" }}
+														title={isMuted ? "Stummschaltung aufheben" : "Stummschalten (Mute)"}
+													>
+														<VolumeLowIcon style={{ opacity: isMuted ? 0.3 : 0.8, color: isMuted ? "#ff453a" : "inherit" }} />
+														<span style={{ color: isMuted ? "#ff453a" : "inherit" }}>
+															{isMuted ? "Stumm" : "Lautstärke"}
+														</span>
 													</div>
 													<div className="cc-classic-slider-track">
 														<input

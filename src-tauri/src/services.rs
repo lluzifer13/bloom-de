@@ -1050,6 +1050,17 @@ pub fn setup_system_worker(app_handle: AppHandle) -> Sender<SystemCommand> {
                             hide_osd("bloom-volume-overlay-enabled");
                         }
                         (SystemCommand::SetVolume(_), None) => {}
+                        (SystemCommand::SetMute(muted), Some(aev)) => {
+                            let _ = aev.SetMute(muted, std::ptr::null());
+                            hide_osd("bloom-volume-overlay-enabled");
+                        }
+                        (SystemCommand::SetMute(_), None) => {}
+                        (SystemCommand::ToggleMute, Some(aev)) => {
+                            let current = aev.GetMute().map(|m| m.as_bool()).unwrap_or(false);
+                            let _ = aev.SetMute(!current, std::ptr::null());
+                            hide_osd("bloom-volume-overlay-enabled");
+                        }
+                        (SystemCommand::ToggleMute, None) => {}
                         (SystemCommand::MediaPlayPause, _) => {
                             if let Some(ref mgr) = manager {
                                 if let Ok(session) = mgr.GetCurrentSession() {
