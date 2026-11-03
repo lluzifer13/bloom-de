@@ -2822,20 +2822,7 @@ function App() {
 		}
 	}, []);
 
-	const toggleBatterySaver = useCallback(async () => {
-		const nextState = !batterySaverEnabled;
-		setBatterySaverEnabled(nextState);
-		try {
-			await invoke("toggle_battery_saver", { enable: nextState });
-			setTimeout(() => {
-				invoke<boolean>("get_battery_saver_state")
-					.then((state) => setBatterySaverEnabled(state))
-					.catch(() => {});
-			}, 600);
-		} catch (e) {
-			console.error("Failed to toggle battery saver:", e);
-		}
-	}, [batterySaverEnabled]);
+
 
 	const handleToggleMute = useCallback((e: React.MouseEvent) => {
 		e.stopPropagation();
