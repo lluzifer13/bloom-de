@@ -271,7 +271,7 @@ function BatteryIcon({
 					fill={
 						charging
 							? "#32D74B"
-							: batterySaver
+							: !charging && batterySaver
 								? "#FFCC00"
 								: percentage <= threshold
 									? "#FF453A"
@@ -3021,7 +3021,7 @@ function App() {
 							threshold={lowBatteryThreshold}
 							batterySaver={batterySaverEnabled}
 						/>
-						<span className="label" style={{ color: batterySaverEnabled ? "#FFCC00" : "inherit" }}>
+						<span className="label" style={{ color: !isCharging && batterySaverEnabled ? "#FFCC00" : "inherit" }}>
 							{batteryLevel}%
 						</span>
 					</>,
@@ -4065,14 +4065,9 @@ function App() {
 													className={`cc-circular-btn ${batterySaverEnabled ? "active" : ""}`}
 													onClick={(e) => {
 														e.stopPropagation();
-														toggleBatterySaver();
-													}}
-													onContextMenu={(e) => {
-														e.preventDefault();
-														e.stopPropagation();
 														openBatterySaverSettings();
 													}}
-													title={`Stromsparmodus: ${batterySaverEnabled ? "Ein" : "Aus"} — Linksklick: Umschalten, Rechtsklick: Einstellungen`}
+													title={`Stromsparmodus: ${batterySaverEnabled ? "Ein" : "Aus"} — Klicken für Einstellungen`}
 												>
 													<BatterySaverIcon />
 												</button>
