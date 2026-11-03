@@ -3479,7 +3479,6 @@ pub fn set_brightness(app: AppHandle, brightness: u32) {
 
 #[tauri::command]
 pub async fn get_battery_saver_state() -> Result<bool, String> {
-    // Uses Windows Runtime PowerManager — no PowerShell required.
     tauri::async_runtime::spawn_blocking(|| {
         unsafe {
             let _ = windows::Win32::System::Com::CoInitializeEx(
@@ -3488,10 +3487,19 @@ pub async fn get_battery_saver_state() -> Result<bool, String> {
             );
         }
         use windows::System::Power::{EnergySaverStatus, PowerManager};
-        match PowerManager::EnergySaverStatus() {
-            Ok(status) => Ok(status == EnergySaverStatus::On),
-            Err(_) => Ok(false), // No battery / not supported on this device
+        if let Ok(status) = PowerManager::EnergySaverStatus() {
+            return Ok(status == EnergySaverStatus::On);
         }
+        // Fallback: check SYSTEM_POWER_STATUS SystemStatusFlag
+        unsafe {
+            use windows::Win32::System::Power::{GetSystemPowerStatus, SYSTEM_POWER_STATUS};
+            let mut status = SYSTEM_POWER_STATUS::default();
+            if GetSystemPowerStatus(&mut status).is_ok() {
+                // SystemStatusFlag == 1 indicates battery saver is active
+                return Ok(status.SystemStatusFlag == 1);
+            }
+        }
+        Ok(false)
     })
     .await
     .map_err(|e| e.to_string())?
@@ -3519,8 +3527,13 @@ pub async fn toggle_battery_saver(enable: bool) -> Result<(), String> {
         use std::os::windows::process::CommandExt;
         const CREATE_NO_WINDOW: u32 = 0x08000000;
         let threshold = if enable { "100" } else { "20" };
+        // Set both DC (battery) and AC threshold to immediately trigger battery saver
         let _ = std::process::Command::new("powercfg")
             .args(&["/setdcvalueindex", "SCHEME_CURRENT", "SUB_ENERGYSAVER", "ESBATTTHRESHOLD", threshold])
+            .creation_flags(CREATE_NO_WINDOW)
+            .status();
+        let _ = std::process::Command::new("powercfg")
+            .args(&["/setacvalueindex", "SCHEME_CURRENT", "SUB_ENERGYSAVER", "ESBATTTHRESHOLD", threshold])
             .creation_flags(CREATE_NO_WINDOW)
             .status();
         let _ = std::process::Command::new("powercfg")

@@ -221,11 +221,13 @@ function TrayIcon() {
 function BatteryIcon({
 	charging,
 	level,
-	threshold = 20
+	threshold = 20,
+	batterySaver = false
 }: {
 	charging: boolean;
 	level: number;
 	threshold?: number;
+	batterySaver?: boolean;
 }) {
 	const percentage = Math.min(Math.max(level, 0), 100);
 
@@ -269,11 +271,13 @@ function BatteryIcon({
 					fill={
 						charging
 							? "#32D74B"
-							: percentage <= threshold
-								? "#FF453A"
-								: percentage <= 40
-									? "#FF9F0A"
-									: "#32D74B"
+							: batterySaver
+								? "#FFCC00"
+								: percentage <= threshold
+									? "#FF453A"
+									: percentage <= 40
+										? "#FF9F0A"
+										: "#32D74B"
 					}
 				/>
 			</svg>
@@ -3015,8 +3019,11 @@ function App() {
 							charging={isCharging}
 							level={batteryLevel}
 							threshold={lowBatteryThreshold}
+							batterySaver={batterySaverEnabled}
 						/>
-						<span className="label">{batteryLevel}%</span>
+						<span className="label" style={{ color: batterySaverEnabled ? "#FFCC00" : "inherit" }}>
+							{batteryLevel}%
+						</span>
 					</>,
 					refreshBatteryDetails
 				);
