@@ -3500,7 +3500,7 @@ pub async fn get_battery_saver_state() -> Result<bool, String> {
         let reg_res = unsafe {
             RegGetValueW(
                 HKEY_LOCAL_MACHINE,
-                w!("SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes"),
+                w!(r"SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes"),
                 w!("ActiveOverlayDcPowerScheme"),
                 RRF_RT_REG_SZ,
                 None,
