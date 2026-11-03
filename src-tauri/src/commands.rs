@@ -3488,15 +3488,31 @@ pub async fn get_battery_saver_state() -> Result<bool, String> {
         }
         use windows::System::Power::{EnergySaverStatus, PowerManager};
         if let Ok(status) = PowerManager::EnergySaverStatus() {
-            return Ok(status == EnergySaverStatus::On);
+            if status == EnergySaverStatus::On {
+                return Ok(true);
+            }
         }
-        // Fallback: check SYSTEM_POWER_STATUS SystemStatusFlag
-        unsafe {
-            use windows::Win32::System::Power::{GetSystemPowerStatus, SYSTEM_POWER_STATUS};
-            let mut status = SYSTEM_POWER_STATUS::default();
-            if GetSystemPowerStatus(&mut status).is_ok() {
-                // SystemStatusFlag == 1 indicates battery saver is active
-                return Ok(status.SystemStatusFlag == 1);
+        // Also check if Best Power Efficiency overlay is active
+        use windows::core::w;
+        use windows::Win32::System::Registry::{RegGetValueW, HKEY_LOCAL_MACHINE, RRF_RT_REG_SZ};
+        let mut buffer = [0u16; 64];
+        let mut size = std::mem::size_of_val(&buffer) as u32;
+        let reg_res = unsafe {
+            RegGetValueW(
+                HKEY_LOCAL_MACHINE,
+                w!("SYSTEM\CurrentControlSet\Control\Power\User\PowerSchemes"),
+                w!("ActiveOverlayDcPowerScheme"),
+                RRF_RT_REG_SZ,
+                None,
+                Some(buffer.as_mut_ptr().cast()),
+                Some(&mut size),
+            )
+        };
+        if reg_res.is_ok() {
+            let len = buffer.iter().position(|c| *c == 0).unwrap_or(buffer.len());
+            let guid = String::from_utf16_lossy(&buffer[..len]);
+            if guid.trim().eq_ignore_ascii_case("961cc777-2547-4f9d-8174-7d86181b8a7a") {
+                return Ok(true);
             }
         }
         Ok(false)
@@ -3526,18 +3542,14 @@ pub async fn toggle_battery_saver(enable: bool) -> Result<(), String> {
     tauri::async_runtime::spawn_blocking(move || {
         use std::os::windows::process::CommandExt;
         const CREATE_NO_WINDOW: u32 = 0x08000000;
-        let threshold = if enable { "100" } else { "20" };
-        // Set both DC (battery) and AC threshold to immediately trigger battery saver
+        // Best power efficiency overlay GUID vs Balanced overlay GUID
+        let overlay_guid = if enable {
+            "961cc777-2547-4f9d-8174-7d86181b8a7a"
+        } else {
+            "00000000-0000-0000-0000-000000000000"
+        };
         let _ = std::process::Command::new("powercfg")
-            .args(&["/setdcvalueindex", "SCHEME_CURRENT", "SUB_ENERGYSAVER", "ESBATTTHRESHOLD", threshold])
-            .creation_flags(CREATE_NO_WINDOW)
-            .status();
-        let _ = std::process::Command::new("powercfg")
-            .args(&["/setacvalueindex", "SCHEME_CURRENT", "SUB_ENERGYSAVER", "ESBATTTHRESHOLD", threshold])
-            .creation_flags(CREATE_NO_WINDOW)
-            .status();
-        let _ = std::process::Command::new("powercfg")
-            .args(&["/setactive", "SCHEME_CURRENT"])
+            .args(&["/overlaysetactive", overlay_guid])
             .creation_flags(CREATE_NO_WINDOW)
             .status();
         Ok(())
